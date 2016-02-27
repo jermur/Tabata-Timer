@@ -13,34 +13,40 @@ namespace Jers_Tabata_Project
 {
     public partial class Form1 : Form
     {
-        int prepareSeconds = 10;
-        int goSecondsLeft = 20;
-        int restSecondsLeft = 10;
-        int tabatas = 8;
+        int prepareSeconds = 10; //Second before exercising begins.
+        int goSecondsLeft = 20; // Number of seconds of work per set
+        int restSecondsLeft = 10; // number of seconds of rest set
+        int tabatas = 8; // Number of sets
 
-        SoundPlayer beep = new SoundPlayer(Resource1.Beep);
+        SoundPlayer beep = new SoundPlayer(Resource1.Beep); //Beeb sound to warn user of next phase change
 
         public Form1()
         {
             InitializeComponent();
         }
 
+        /*
+        *  The timer counts down from 20 to zero displaying 'Go' to indicate the work phase.
+        *  The timer then counts down from 10 displaying rest indicating the rest phase.
+        *  Beeb tones are used to prepare the user for the next phase change.
+        */
         private void timer1_Tick(object sender, EventArgs e)
         {
 
+            // The work phase
             if (goSecondsLeft >= 0)
             {
                 lbGoOrRest.Text = "Go!";
                 lbSecondsRemaining.Text = goSecondsLeft.ToString() + " seconds";
                 goSecondsLeft--;
 
-                if (goSecondsLeft <= 3)
+                if (goSecondsLeft <= 3) 
                 {
-                    beep.Play();
+                    beep.Play(); //Outputs beep sounds to warn user audibly
                 }
 
 
-            }
+            } //The rest phase
             else if (restSecondsLeft >= 0)
             {
                 lbGoOrRest.Text = "Rest";
@@ -49,14 +55,14 @@ namespace Jers_Tabata_Project
 
                 if (restSecondsLeft <= 3)
                 {
-                    beep.Play();
+                    beep.Play(); //Outputs beep sounds to warn user audibly
                 }
             }
-            else
+            else // resets the counter variables,decrements the number of tabatas left and resets the timer
             {
                 goSecondsLeft = 20;
                 restSecondsLeft = 10;
-                tabatas--;
+                tabatas--; 
                 lbTabatasRemaining.Text = "Tabatas remaining " + tabatas.ToString();
                 timerGo.Stop();
                 timerGo.Start();
@@ -66,7 +72,7 @@ namespace Jers_Tabata_Project
 
         private void button1_Click(object sender, EventArgs e)
         {
-            timerPrepare.Start();
+            timerPrepare.Start(); // Gives the user 10 second to prepare.
            
            
         }
@@ -74,11 +80,18 @@ namespace Jers_Tabata_Project
         private void button2_Click(object sender, EventArgs e)
         {
             
-            timerGo.Stop();
+            timerGo.Stop(); // stops the timer
+            timerGo.Dispose(); // releases resouses used by the timer
         }
-
+        
+        /*
+        *  This timer counts down from 10 allowing the user to prepare for the workout.
+        *  The text 'Prepare' is displayed in bold
+        *  the time counts down from 10 beeping for the las 4 seconds so the user doesn't hae to lok at the screen
+        */
         private void timerPrepare_Tick(object sender, EventArgs e)
         {
+            // Gives the user 10 seconds to prepare
             if (prepareSeconds >= 0)
             {
                 lbPrepare.Text = "Prepare!";
@@ -87,16 +100,16 @@ namespace Jers_Tabata_Project
 
                 if (prepareSeconds <= 3)
                 {
-                    beep.Play();
+                    beep.Play(); //Outputs beep sounds to warn user audibly
                 }
             }
-            else
+            else 
             {
-                lbPrepare.Text = "";
-                timerPrepare.Stop();
-                timerPrepare.Dispose();
+                lbPrepare.Text = ""; // clears the prepare label
+                timerPrepare.Stop(); // stops the timer
+                timerPrepare.Dispose(); //releases teh resources used by the timer
                 
-                timerGo.Start();
+                timerGo.Start(); //starts the workout
 
             }
         }
